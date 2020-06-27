@@ -20,9 +20,18 @@ public class PlayerController : MonoBehaviour
         float yThrow = Input.GetAxis("Vertical");
         bool jumpPressed = Input.GetButtonDown("Jump");
 
-        Vector3 moveDirection = new Vector3(xThrow * moveSpeed, controller.velocity.y, yThrow * moveSpeed);
+        Vector3 camForward = Camera.main.transform.forward.normalized;
+        Vector3 camRight = Camera.main.transform.right.normalized;
+        camForward.y = 0f;
+        camRight.y = 0f;
+        camRight *= xThrow * moveSpeed;
+        camForward *= yThrow * moveSpeed;
+
+        Vector3 moveDirection = controller.velocity;
 
         moveDirection += Physics.gravity * gravityFactor;
+        moveDirection += camForward;
+        moveDirection += camRight;
 
         if(jumpPressed)
         {
